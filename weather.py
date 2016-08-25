@@ -5,6 +5,7 @@ import logging
 import pyowm
 from pyowm import OWM
 
+import telegram
 from telegram import Update
 from telegram.ext import Updater, CommandHandler, MessageHandler, Filters
 
@@ -25,7 +26,10 @@ updater = Updater(token = '236649244:AAEhWLRS1dSQQLnk2im6Q9v-dkvxhGD0FN4')
 # Токен API погоды
 owm = OWM('a66952168b007928153234c13aa8970d', language = 'ru')
 # Локация пользователя
-town = ''
+city = ''
+
+'''_____________________База данных___________________________'''
+
 
 
 '''______________________Основные функции__________________________'''
@@ -34,20 +38,30 @@ def start(bot, update):
     """ Welcome a user to the chat """
     message = update.message
     chat_id = message.chat_id
-    bot.sendMessage(chat_id=chat_id, text = 'Welcome to weather bot\n
-                                            ')
+
+    main_keyboard = [[ '/get_weather',
+                       'Forecast', ]]
+    main_markup = telegram.ReplyKeyboardMarkup(main_keyboard)
+    bot.sendMessage(chat_id=chat_id, text = 'Введи свой город в формате "Moscow,RU", или выберите одну из комманд', reply_markup = main_markup)
 
 def echo(bot, update):
     message = update.message
     chat_id = message.chat_id
 
-    town = update.message.text
+    city = message.text
 
-    obs = owm.weather_at_place(town)
+    return city
+
+def get_weather(bot, update):
+    message = update.message
+    chat_id = message.chat_id
+
+    obs = owm.weather_at_place(city)
     w = obs.get_weather()
 
     temp = str(round(w.get_temperature(unit='celsius').get('temp')))
     status = str(w.get_detailed_status())
+
     bot.sendMessage(chat_id=chat_id, text = "Температура: " + temp +", состояние погоды: " + status)
 
 def main():
@@ -57,6 +71,7 @@ def main():
 
     dp.add_handler(MessageHandler([Filters.text], echo))
 
+    dp.add_handler(CommandHandler("get_weather", get_weather))
 
     updater.start_polling()
 
