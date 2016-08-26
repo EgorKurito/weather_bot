@@ -4,7 +4,7 @@ import sqlite3
 class SQLighter:
 
     def __init__(self, database):
-        self.connection = sqlite3.connect(database)
+        self.connection = sqlite3.connect(database, check_same_thread=False)
         self.cursor = self.connection.cursor()
 
     def select_all(self):
@@ -22,6 +22,11 @@ class SQLighter:
         with self.connection:
             result = self.cursor.execute('SELECT * FROM weather').fetchall()
             return len(result)
+
+    def add_row(self, Id,town):
+        """ Добавляем наш город в баззу данных"""
+        with self.connection:
+            return self.cursor.execute("INSERT INTO weather VALUES (?,?)", (None,town))
 
     def close(self):
         """ Закрываем текущее соединение с БД """
