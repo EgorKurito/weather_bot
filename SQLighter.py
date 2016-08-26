@@ -23,10 +23,10 @@ class SQLighter:
             result = self.cursor.execute('SELECT * FROM weather').fetchall()
             return len(result)
 
-    def add_row(self, Id,town):
+    def add_row(self, town):
         """ Добавляем наш город в баззу данных"""
         with self.connection:
-            return self.cursor.execute("INSERT INTO weather VALUES (?,?)", (None,town))
+            return self.cursor.execute("INSERT INTO weather(city) VALUES (?);", (town,))
 
     def close(self):
         """ Закрываем текущее соединение с БД """

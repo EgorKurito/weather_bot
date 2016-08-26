@@ -37,11 +37,7 @@ c_rows = db.count_rows
 '''______________________Главная клавиатура__________________________'''
 
 
-main_keyboard = [[ '/setting',
-                    db.select_single(1),
-                    'sadas', ]]
 
-main_markup = telegram.ReplyKeyboardMarkup(main_keyboard)
 
 
 '''______________________Основные функции__________________________'''
@@ -51,13 +47,18 @@ def start(bot, update):
     message = update.message
     chat_id = message.chat_id
 
+    main_keyboard = [[ "/setting",
+                        str(db.select_single(2)) ]]
+
+    main_markup = telegram.ReplyKeyboardMarkup(main_keyboard)
+
     bot.sendMessage(chat_id=chat_id, text = 'Введи свой город в формате "Moscow,RU", или выберите одну из комманд', reply_markup = main_markup)
 
 def echo(bot, update):
     message = update.message
     chat_id = message.chat_id
 
-    town = db.add_row(None,message.text)
+    town = db.add_row(message.text)
 
 def get_weather(bot, update):
     message = update.message
