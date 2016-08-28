@@ -9,8 +9,6 @@ import telegram
 from telegram import Update
 from telegram.ext import Updater, CommandHandler, MessageHandler, Filters
 
-import sqlite3
-from SQLighter import SQLighter
 
 '''______________________Настройка авторизации__________________________'''
 
@@ -30,10 +28,6 @@ updater = Updater(token = '236649244:AAEhWLRS1dSQQLnk2im6Q9v-dkvxhGD0FN4')
 owm = OWM('a66952168b007928153234c13aa8970d', language = 'ru')
 cities = []
 
-'''______________________Клавиатуры__________________________'''
-
-
-
 '''______________________Основные функции__________________________'''
 
 def start(bot, update):
@@ -41,19 +35,19 @@ def start(bot, update):
     message = update.message
     chat_id = message.chat_id
 
-    first_keyboard = [[ "/setting" ]]
-    first_markup = telegram.ReplyKeyboardMarkup(first_keyboard)
-
-    second_keyboard = [[ "/setting",
-                         str(cities[0]) ]]
-    second_markup = telegram.ReplyKeyboardMarkup(second_keyboard)
-
+    bot.sendMessage(chat_id = chat_id, text = "Dfsf", reply_to_message_id = message.message_id)
     if len(cities) == 0:
-        bot.sendMessage(chat_id = chat_id, text = 'Введи свой город в формате "Moscow,RU", или выберите одну из комманд', reply_markup = first_markup)
+        bot.sendMessage(chat_id = chat_id, text = text)
     elif len(cities) == 1:
-        bot.sendMessage(chat_id = chat_id, text = 'Введи свой город в формате "Moscow,RU", или выберите одну из комманд', reply_markup = second_markup)
+        first_keyboard = [[ str(cities[0]) ]]
+        first_markup = telegram.ReplyKeyboardMarkup(first_keyboard)
+        bot.sendMessage(chat_id = chat_id, text = text, reply_markup = first_markup)
+    elif len(cities) == 2:
+        second_keyboard = [[ str(cities[0]), str(cities[1]) ]]
+        second_markup = telegram.ReplyKeyboardMarkup(second_keyboard)
+        bot.sendMessage(chat_id = chat_id, text = text, reply_markup = second_markup)
     else:
-        bot.sendMessage(chat_id = chat_id,text = "Введите хотябы один город")
+        return None
 
 def echo(bot, update):
     message = update.message

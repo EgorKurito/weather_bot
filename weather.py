@@ -33,20 +33,9 @@ def start(bot, update):
     """ Welcome a user to the chat """
     message = update.message
     chat_id = message.chat_id
+    text = "Приветствие;Дальнейшие указания"
 
-    first_keyboard = [[ "/setting" ]]
-    first_markup = telegram.ReplyKeyboardMarkup(first_keyboard)
-
-    second_keyboard = [[ "/setting",
-                         str(cities[0]) ]]
-    second_markup = telegram.ReplyKeyboardMarkup(second_keyboard)
-
-    if len(cities) == 0:
-        bot.sendMessage(chat_id = chat_id, text = 'Введи свой город в формате "Moscow,RU", или выберите одну из комманд', reply_markup = first_markup)
-    elif len(cities) == 1:
-        bot.sendMessage(chat_id = chat_id, text = 'Введи свой город в формате "Moscow,RU", или выберите одну из комманд', reply_markup = second_markup)
-    else:
-        bot.sendMessage(chat_id = chat_id,text = "Введите хотябы один город")
+    
 
 def echo(bot, update):
     message = update.message
