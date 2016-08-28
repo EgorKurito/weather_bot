@@ -9,9 +9,6 @@ import telegram
 from telegram import Update
 from telegram.ext import Updater, CommandHandler, MessageHandler, Filters
 
-import sqlite3
-from SQLighter import SQLighter
-
 '''______________________Настройка авторизации__________________________'''
 
 root = logging.getLogger()
@@ -28,18 +25,7 @@ logger = logging.getLogger(__name__)
 updater = Updater(token = '236649244:AAEhWLRS1dSQQLnk2im6Q9v-dkvxhGD0FN4')
 # Токен API погоды
 owm = OWM('a66952168b007928153234c13aa8970d', language = 'ru')
-
-
-'''_____________________База данных___________________________'''
-
-db = SQLighter('weather.db')
-c_rows = db.count_rows
-
-'''______________________Главная клавиатура__________________________'''
-
-
-
-
+cities = []
 
 '''______________________Основные функции__________________________'''
 
@@ -48,19 +34,25 @@ def start(bot, update):
     message = update.message
     chat_id = message.chat_id
 
-    main_keyboard = [[ "/setting",
-                        str(db.select_single(2)),
-                        str(db.select_single(8)) ]]
+    first_keyboard = [[ "/setting" ]]
+    first_markup = telegram.ReplyKeyboardMarkup(first_keyboard)
 
-    main_markup = telegram.ReplyKeyboardMarkup(main_keyboard)
+    second_keyboard = [[ "/setting",
+                         str(cities[0]) ]]
+    second_markup = telegram.ReplyKeyboardMarkup(second_keyboard)
 
-    bot.sendMessage(chat_id=chat_id, text = 'Введи свой город в формате "Moscow,RU", или выберите одну из комманд', reply_markup = main_markup)
+    if len(cities) == 0:
+        bot.sendMessage(chat_id = chat_id, text = 'Введи свой город в формате "Moscow,RU", или выберите одну из комманд', reply_markup = first_markup)
+    elif len(cities) == 1:
+        bot.sendMessage(chat_id = chat_id, text = 'Введи свой город в формате "Moscow,RU", или выберите одну из комманд', reply_markup = second_markup)
+    else:
+        bot.sendMessage(chat_id = chat_id,text = "Введите хотябы один город")
 
 def echo(bot, update):
     message = update.message
     chat_id = message.chat_id
 
-    town = db.add_row(message.text)
+    cities.append(message.text)
 
 def get_weather(bot, update):
     message = update.message
@@ -68,7 +60,7 @@ def get_weather(bot, update):
 
 
 
-    obs = owm.weather_at_place(city)
+    obs = owm.weather_at_place(cities[0])
     w = obs.get_weather()
 
     temp = str(round(w.get_temperature(unit='celsius').get('temp')))
