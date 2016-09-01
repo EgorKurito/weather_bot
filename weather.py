@@ -74,13 +74,22 @@ def get_weather(bot, update, text):
 
     bot.sendMessage(chat_id=chat_id, text = "Температура: " + temp +", состояние погоды: " + status)
 
+def delete(bot, update, args):
+    message = update.message
+    chat_id = message.chat_id
+
+    try:
+        towns.remove(args[0])
+        bot.sendMessage(chat_id = chat_id, text = "Этого города не существует", reply_markup = town_markup)
+    except ValueError:
+        bot.sendMessage(chat_id = chat_id, text = "Этого города не существует", reply_markup = town_markup)
 
 def main():
     dp = updater.dispatcher
 
     dp.add_handler(CommandHandler("start", start))
-
     dp.add_handler(MessageHandler([Filters.text], city))
+    dp.add_handler(CommandHandler('delete',delete, pass_args=True))
 
     updater.start_polling()
 

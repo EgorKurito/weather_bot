@@ -19,14 +19,12 @@ print(owm.is_API_online())
 print(obs.get_reception_time(timeformat='iso'))
 print(w.get_reference_time(timeformat='iso'))
 '''
-x = ['x']
-if len(x) == 0:
-    print(0)
-else:
-    for a in x:
-        if a == "egor":
-            print('da')
-        else:
-            x.append('egor')
-
+towns = ['Kazan','Moscow']
+x = [towns]
+def abc(x):
+    try:
+        x.remove('Kazan')
+    except ValueError:
+        return('net bukvi')
+print(abc(towns))
 print(x)
