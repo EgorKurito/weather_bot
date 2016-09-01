@@ -83,3 +83,14 @@ def main():
 
 if __name__ == '__main__':
     main()
+
+
+
+
+for city in town_keyboard:
+    for town in city:
+        if text == town:
+            bot.sendMessage(chat_id = chat_id, text = "Погода")
+        else:
+            town_keyboard.append([text])
+            bot.sendMessage(chat_id = chat_id, text = "Город сохранен", reply_markup = town_markup)
