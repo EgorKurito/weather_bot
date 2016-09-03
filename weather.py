@@ -25,15 +25,19 @@ logger = logging.getLogger(__name__)
 updater = Updater(token = '236649244:AAEhWLRS1dSQQLnk2im6Q9v-dkvxhGD0FN4')
 # Токен API погоды
 owm = OWM('a66952168b007928153234c13aa8970d', language = 'ru')
-towns = []
 hide_markup = telegram.ReplyKeyboardHide()
-town_keyboard = [towns]
+
+towns = [] # list of city
+town_keyboard = [towns,["Remove city"]]
 town_markup = telegram.ReplyKeyboardMarkup(town_keyboard, resize_keyboard = True)
+
+remove_towns = []
+remove_keyboard = [remove_towns]
+remove_markup = telegram.ReplyKeyboardMarkup(remove_keyboard)
 
 '''______________________Основные функции__________________________'''
 
 def start(bot, update):
-    """ Welcome a user to the chat """
     message = update.message
     chat_id = message.chat_id
 
@@ -44,23 +48,29 @@ def city(bot, update):
     chat_id = message.chat_id
     text = message.text
 
-    if len(towns) == 0:
-        towns.append(text)
-        bot.sendMessage(chat_id = chat_id, text = "Сохранили", reply_markup = town_markup)
-    elif len(towns) == 1:
-        if text == towns[0]:
-            get_weather(bot, update, text)
-        else:
-            towns.append(text)
-            bot.sendMessage(chat_id = chat_id, text = "Сохранили", reply_markup = town_markup)
-    elif len(towns) == 2:
-        if text == towns[0] or text == towns[1]:
-            get_weather(bot, update, text)
-        else:
-            towns.append(text)
-            bot.sendMessage(chat_id = chat_id, text = "Сохранили", reply_markup = town_markup)
+    if text == "Remove city":
+        bot.sendMessage(chat_id = chat_id, text = "Выберите город который хотите удалить", reply_markup = remove_markup)
     else:
-        get_weather(bot, update, text)
+        if len(towns) == 0:
+            towns.append(text)
+            remove_towns.append("/delete " + text)
+            bot.sendMessage(chat_id = chat_id, text = "Сохранили", reply_markup = town_markup)
+        elif len(towns) == 1:
+            if text == towns[0] and "/delete " + text == remove_towns[0]:
+                get_weather(bot, update, text)
+            else:
+                towns.append(text)
+                remove_towns.append("/delete " + text)
+                bot.sendMessage(chat_id = chat_id, text = "Сохранили", reply_markup = town_markup)
+        elif len(towns) == 2:
+            if (text == towns[0] or text == towns[1]) and ("/delete " + text == remove_towns[0] or "/delete " + text == remove_towns[1]):
+                get_weather(bot, update, text)
+            else:
+                towns.append(text)
+                remove_towns.append("/delete " + text)
+                bot.sendMessage(chat_id = chat_id, text = "Сохранили", reply_markup = town_markup)
+        else:
+            get_weather(bot, update, text)
 
 def get_weather(bot, update, text):
     message = update.message
@@ -80,7 +90,8 @@ def delete(bot, update, args):
 
     try:
         towns.remove(args[0])
-        bot.sendMessage(chat_id = chat_id, text = "Этого города не существует", reply_markup = town_markup)
+        remove_towns.remove("/delete " + args[0])
+        bot.sendMessage(chat_id = chat_id, text = "Город удален", reply_markup = town_markup)
     except ValueError:
         bot.sendMessage(chat_id = chat_id, text = "Этого города не существует", reply_markup = town_markup)
 
