@@ -41,7 +41,7 @@ def start(bot, update):
     message = update.message
     chat_id = message.chat_id
 
-    bot.sendMessage(chat_id = chat_id, text = "Введите город для сохранения")
+    bot.sendMessage(chat_id = chat_id, text = "Введите город для сохранения", reply_markup = town_markup)
 
 def city(bot, update):
     message = update.message
@@ -95,13 +95,17 @@ def delete(bot, update, args):
     except ValueError:
         bot.sendMessage(chat_id = chat_id, text = "Этого города не существует", reply_markup = town_markup)
 
+# Функция отвечающая за вывод ошибки при вводе несуществующей комманды
+def unknown(bot, update):
+    bot.sendMessage(chat_id = update.message.chat_id, text = "Я не знаю эту команду(")
+
 def main():
     dp = updater.dispatcher
 
     dp.add_handler(CommandHandler("start", start))
     dp.add_handler(MessageHandler([Filters.text], city))
     dp.add_handler(CommandHandler('delete',delete, pass_args=True))
-
+    dp.add_handler(MessageHandler([Filters.command], unknown))
     updater.start_polling()
 
     updater.idle()
