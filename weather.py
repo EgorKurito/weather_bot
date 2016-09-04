@@ -110,13 +110,14 @@ def main():
     dp.add_handler(MessageHandler([Filters.command], unknown))
     #updater.start_polling()
 
-    PORT = int(os.environ.get('PORT', '5000'))
-    updater.start_webhook(listen="0.0.0.0",
-                      port=PORT,
-                      url_path=TOKEN)
-    updater.bot.setWebhook("https://weatheregorbot.herokuapp.com/" + TOKEN)
+    updater.start_webhook(listen='0.0.0.0',
+                      port=8443,
+                      url_path='TOKEN',
+                      key='private.key',
+                      cert='cert.pem',
+                      webhook_url='https://weatheregorbot.herokuapp.com:8443/236649244:AAEhWLRS1dSQQLnk2im6Q9v-dkvxhGD0FN4')
 
-    updater.idle()
+    #updater.idle()
 
 
 if __name__ == '__main__':
