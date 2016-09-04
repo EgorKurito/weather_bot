@@ -110,12 +110,6 @@ def main():
     dp.add_handler(MessageHandler([Filters.command], unknown))
     updater.start_polling()
 
-    '''PORT = int(os.environ.get('PORT', '5000'))
-    updater = Updater(TOKEN)
-    updater.start_webhook(listen="0.0.0.0",
-                      port=8443,
-                      url_path=TOKEN)
-    updater.bot.setWebhook("https://weatheregorbot.herokuapp.com/" + TOKEN)'''
     updater.idle()
 
 
