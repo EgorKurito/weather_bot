@@ -108,7 +108,7 @@ def main():
     dp.add_handler(MessageHandler([Filters.text], city))
     dp.add_handler(CommandHandler('delete',delete, pass_args=True))
     dp.add_handler(MessageHandler([Filters.command], unknown))
-    updater.start_polling()
+    #updater.start_polling()
 
     PORT = int(os.environ.get('PORT', '5000'))
     updater.start_webhook(listen="0.0.0.0",
