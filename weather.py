@@ -8,7 +8,7 @@ from pyowm import OWM
 
 import telegram
 from telegram import Update, ForceReply
-from telegram.ext import Updater, CommandHandler, MessageHandler, Filters
+from telegram.ext import Updater, CommandHandler, MessageHandler, Filters, Job
 
 '''______________________Настройка авторизации__________________________'''
 
@@ -30,12 +30,14 @@ owm = OWM('a66952168b007928153234c13aa8970d', language = 'ru')
 hide_markup = telegram.ReplyKeyboardHide()
 
 towns = [] # list of city
-town_keyboard = [towns,["Remove city"]]
+town_keyboard = [towns,["Remove city", "Notification"]]
 town_markup = telegram.ReplyKeyboardMarkup(town_keyboard, resize_keyboard = True)
 
 remove_towns = []
 remove_keyboard = [remove_towns]
 remove_markup = telegram.ReplyKeyboardMarkup(remove_keyboard)
+
+noti = updater.job_queue
 
 '''______________________Основные функции__________________________'''
 
@@ -97,8 +99,14 @@ def delete(bot, update, args):
     except ValueError:
         bot.sendMessage(chat_id = chat_id, text = "Этого города не существует", reply_markup = town_markup)
 
+def callback_weather(bot, job):
+    bot.sendMessage(chat_id = chat_id, text = "test")
+
 # Функция отвечающая за вывод ошибки при вводе несуществующей комманды
 def unknown(bot, update):
+    message = update.message
+    chat_id = message.chat_id
+
     bot.sendMessage(chat_id = update.message.chat_id, text = "Я не знаю эту команду(")
 
 def main():
@@ -110,8 +118,10 @@ def main():
     dp.add_handler(MessageHandler([Filters.command], unknown))
     updater.start_polling()
 
-    updater.idle()
+    job_weather = Job(callback_weather, 60.0)
+    noti.put(job_weather, next_t = 1.0)
 
+    updater.idle()
 
 if __name__ == '__main__':
     main()
