@@ -10,6 +10,8 @@ import telegram
 from telegram import Update, ForceReply
 from telegram.ext import Updater, CommandHandler, MessageHandler, Filters, Job
 
+from datetime import datetime
+
 '''______________________Настройка авторизации__________________________'''
 
 root = logging.getLogger()
@@ -40,6 +42,13 @@ remove_markup = telegram.ReplyKeyboardMarkup(remove_keyboard)
 noti = updater.job_queue
 
 '''______________________Основные функции__________________________'''
+
+def time_now():
+    now_time = datetime.now()
+    cur_hour = now_time.hour
+    time = (16 - cur_hour) * 3600
+
+    return time
 
 def start(bot, update):
     message = update.message
@@ -100,7 +109,7 @@ def delete(bot, update, args):
         bot.sendMessage(chat_id = chat_id, text = "Этого города не существует", reply_markup = town_markup)
 
 def callback_weather(bot, job):
-    bot.sendMessage(chat_id = chat_id, text = "test")
+    bot.sendMessage(chat_id = '161605438', text = 'test')
 
 # Функция отвечающая за вывод ошибки при вводе несуществующей комманды
 def unknown(bot, update):
@@ -118,8 +127,8 @@ def main():
     dp.add_handler(MessageHandler([Filters.command], unknown))
     updater.start_polling()
 
-    job_weather = Job(callback_weather, 60.0)
-    noti.put(job_weather, next_t = 1.0)
+    job_weather = Job(callback_weather, 86400.0)
+    noti.put(job_weather, next_t = time_now())
 
     updater.idle()
 
