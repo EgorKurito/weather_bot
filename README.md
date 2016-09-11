@@ -1,2 +1,1 @@
-This is a telegram weather bot
-
+This is a simple telegram bot, using UPDATER without WEBHOOKs.

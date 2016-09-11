@@ -1,17 +1,32 @@
+# Импорт нужных библиотек и пакетов
 import weather, config
+import telegram, logging, pyowm
 
-import logging
-import telegram
 from telegram import Update
 from telegram.ext import Updater, CommandHandler, MessageHandler, Filters
+from pyowm import OWM
 
+# Основные переменные
+updater = Updater(token = config.BOT_TOKEN)
+owm = OWM(config.WEATHER_TOKEN, language = 'ru')
+
+# Авторизация бота
+root = logging.getLogger()
+root.setLevel(logging.INFO)
+
+logging.basicConfig(format = '%(asctime)s - %(name)s - %(levelname)s - %(message)s',
+                                  level = logging.INFO)
+
+logger = logging.getLogger(__name__)
+
+# Главная функция запускающая процессы в боте
 def main():
     dp = updater.dispatcher
 
-    dp.add_handler(CommandHandler("start", start))
-    dp.add_handler(MessageHandler([Filters.text], city))
-    dp.add_handler(CommandHandler('delete',delete, pass_args=True))
-    dp.add_handler(MessageHandler([Filters.command], unknown))
+    dp.add_handler(CommandHandler("start", weather.start))
+    dp.add_handler(MessageHandler([Filters.text], weather.city))
+    dp.add_handler(CommandHandler('delete', weather.delete, pass_args=True))
+    dp.add_handler(MessageHandler([Filters.command], weather.unknown))
     updater.start_polling()
 
     updater.idle()
