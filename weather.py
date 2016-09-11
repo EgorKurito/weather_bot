@@ -1,5 +1,5 @@
 '''______________________Импорт нужных билиотек__________________________'''
-
+import config
 import logging
 import os
 
@@ -22,11 +22,6 @@ logger = logging.getLogger(__name__)
 
 '''_____________________Глобальные переменные___________________________'''
 
-# Токен бота
-TOKEN = '236649244:AAEhWLRS1dSQQLnk2im6Q9v-dkvxhGD0FN4'
-updater = Updater(token = '236649244:AAEhWLRS1dSQQLnk2im6Q9v-dkvxhGD0FN4')
-# Токен API погоды
-owm = OWM('a66952168b007928153234c13aa8970d', language = 'ru')
 hide_markup = telegram.ReplyKeyboardHide()
 
 towns = [] # list of city
@@ -103,17 +98,3 @@ def unknown(bot, update):
     chat_id = message.chat_id
 
     bot.sendMessage(chat_id = update.message.chat_id, text = "Я не знаю эту команду(")
-
-def main():
-    dp = updater.dispatcher
-
-    dp.add_handler(CommandHandler("start", start))
-    dp.add_handler(MessageHandler([Filters.text], city))
-    dp.add_handler(CommandHandler('delete',delete, pass_args=True))
-    dp.add_handler(MessageHandler([Filters.command], unknown))
-    updater.start_polling()
-
-    updater.idle()
-
-if __name__ == '__main__':
-    main()
