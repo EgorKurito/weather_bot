@@ -1,4 +1,4 @@
-# Импорт нужных библиотек и пакетов
+# Import libraries and packages
 import config, main
 import telegram, pyowm
 
@@ -6,28 +6,28 @@ from telegram import Update, ForceReply
 from telegram.ext import Updater, CommandHandler, MessageHandler, Filters
 from pyowm import OWM
 
-# Скрытие клавиатуры по ненадобности
+# Folding the keyboard
 hide_markup = telegram.ReplyKeyboardHide()
 
-# Список городо в списке(основная клавиатура)
+# List of city(mainkeyboard)
 towns = []
 town_keyboard = [['Помощь'], towns]
 town_markup = telegram.ReplyKeyboardMarkup(town_keyboard, resize_keyboard = True)
 
-# Список городов для их удаления из основного списка
+# List of city for delete
 remove_towns = []
 remove_keyboard = [remove_towns]
 remove_markup = telegram.ReplyKeyboardMarkup(remove_keyboard, resize_keyboard = True)
 
-# Сообщения
+# Message
 helpmessages = "Введите свой город в формате 'Moscow'"
 
-# Основные функции бота
-# Обязательная функция старта
+# Main bot function
+# Required start function
 def start(bot, update):
     bot.sendMessage(chat_id = update.message.chat_id, text = "Введите город для сохранения", reply_markup = town_markup)
 
-# Функция отвечающая заопределение команд которые вводит пользователь боту
+# User message function
 def city(bot, update):
     message = update.message
     chat_id = message.chat_id
@@ -61,7 +61,7 @@ def city(bot, update):
         else:
             get_weather(bot, update, text)
 
-# Функция получения погоды
+# Weather getting function
 def get_weather(bot, update, text):
     obs = main.owm.weather_at_place(text)
     w = obs.get_weather()
@@ -70,12 +70,12 @@ def get_weather(bot, update, text):
 
     bot.sendMessage(chat_id=update.message.chat_id, text = "Температура: " + temp +", состояние погоды: " + status)
 
-# Функция удаления города из основного списка
+# City deletting function
 def delete(bot, update, args):
     message = update.message
     chat_id = message.chat_id
 
-    #Проверка на существование города
+    # Checking the existence of the city
     try:
         towns.remove(args[0])
         remove_towns.remove("/delete " + args[0])
@@ -86,6 +86,6 @@ def delete(bot, update, args):
     except ValueError:
         bot.sendMessage(chat_id = chat_id, text = "Этого города не существует", reply_markup = town_markup)
 
-# Функция отвечающая за вывод ошибки при вводе несуществующей комманды
+# Error function
 def unknown(bot, update):
     bot.sendMessage(chat_id = update.message.chat_id, text = "Я не знаю эту команду(")

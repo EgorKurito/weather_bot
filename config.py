@@ -1,4 +1,4 @@
-# Токен бота
-BOT_TOKEN = '308017424:AAEcnQMCPCaMP-s-YNVx298DFOPtR69DRFU'
-# Токен API погоды
-WEATHER_TOKEN = 'a66952168b007928153234c13aa8970d'
+# Bot token
+BOT_TOKEN = 'token'
+# Weather API token
+WEATHER_TOKEN = 'token'

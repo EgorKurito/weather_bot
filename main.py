@@ -1,4 +1,4 @@
-# Импорт нужных библиотек и пакетов
+# Importing libraries and packages
 import weather, config
 import telegram, logging, pyowm
 
@@ -6,11 +6,11 @@ from telegram import Update
 from telegram.ext import Updater, CommandHandler, MessageHandler, Filters
 from pyowm import OWM
 
-# Основные переменные
+# Main variable
 updater = Updater(token = config.BOT_TOKEN)
 owm = OWM(config.WEATHER_TOKEN, language = 'ru')
 
-# Авторизация бота
+# Bot authentication
 root = logging.getLogger()
 root.setLevel(logging.INFO)
 
@@ -19,7 +19,7 @@ logging.basicConfig(format = '%(asctime)s - %(name)s - %(levelname)s - %(message
 
 logger = logging.getLogger(__name__)
 
-# Главная функция запускающая процессы в боте
+# Main function
 def main():
     dp = updater.dispatcher
 
