@@ -1,13 +1,13 @@
 import telegram
+import os
 from flask import Flask, request
 
-app = Flask(__name__)
-
 TOKEN = "308017424:AAEcnQMCPCaMP-s-YNVx298DFOPtR69DRFU"
-
+PORT = int(os.environ.get('PORT', '8000'))
 
 global bot
 bot = telegram.Bot(token = TOKEN)
+app = Flask(__name__)
 
 
 @app.route('/'+TOKEN, methods=['POST'])
@@ -39,3 +39,10 @@ def set_webhook():
 @app.route('/')
 def index():
     return '.'
+
+if __name__ == '__main__':
+    setWebhook()
+
+    app.run(listen="0.0.0.0",
+            port=PORT,
+            url_path=TOKEN)
