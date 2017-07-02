@@ -1,48 +1,39 @@
-import telegram
-import os
-from flask import Flask, request
+# Importing libraries and packages
+import weather, config
+import telegram, logging, pyowm
 
-TOKEN = "308017424:AAEcnQMCPCaMP-s-YNVx298DFOPtR69DRFU"
-PORT = int(os.environ.get('PORT', '8000'))
+from telegram import Update
+from telegram.ext import Updater, CommandHandler, MessageHandler, Filters
+from pyowm import OWM
 
-global bot
-bot = telegram.Bot(token = TOKEN)
-app = Flask(__name__)
+# Main variable
+updater = Updater(token = config.BOT_TOKEN)
+updater.start_webhook(listen = "0.0.0.0",
+                      port = config.PORT,
+                      url_path = config.BOT_TOKEN)
+updater.bot.set_webhook("https://weatheregorbot.herokuapp.com/" + TOKEN)
+owm = OWM(config.WEATHER_TOKEN, language = 'ru')
 
+# Bot authentication
+root = logging.getLogger()
+root.setLevel(logging.INFO)
 
-@app.route('/'+TOKEN, methods=['POST'])
-def webhook_handler():
-    if request.method == "POST":
-        # retrieve the message in JSON and then transform it to Telegram object
-        update = telegram.Update.de_json(request.get_json(force=True))
+logging.basicConfig(format = '%(asctime)s - %(name)s - %(levelname)s - %(message)s',
+                                  level = logging.INFO)
 
-        chat_id = update.message.chat.id
+logger = logging.getLogger(__name__)
 
-        # Telegram understands UTF-8, so encode text for unicode compatibility
-        text = update.message.text.encode('utf-8')
+# Main function
+def main():
+    dp = updater.dispatcher
 
-        # repeat the same message back (echo)
-        bot.sendMessage(chat_id=chat_id, text=text)
+    dp.add_handler(CommandHandler("start", weather.start))
+    dp.add_handler(MessageHandler([Filters.text], weather.city))
+    dp.add_handler(CommandHandler('delete', weather.delete, pass_args=True))
+    dp.add_handler(MessageHandler([Filters.command], weather.unknown))
+    updater.start_polling()
 
-    return 'ok'
-
-
-@app.route('/set_webhook', methods=['GET', 'POST'])
-def set_webhook():
-    s = bot.setWebhook("https://weatheregorbot.herokuapp.com/" + TOKEN)
-    if s:
-        return "webhook setup ok"
-    else:
-        return "webhook setup failed"
-
-
-@app.route('/')
-def index():
-    return '.'
+    updater.idle()
 
 if __name__ == '__main__':
-    setWebhook()
-
-    app.run(listen="0.0.0.0",
-            port=PORT,
-            url_path=TOKEN)
+    main()
