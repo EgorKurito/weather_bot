@@ -44,7 +44,9 @@ def index():
 app.wsgi_app = ProxyFix(app.wsgi_app)
 if __name__ == '__main__':
     set_webhook()
-
-    app.run(host="0.0.0.0",
+    bot.start_webhook(listen="0.0.0.0",
+                      port=PORT,
+                      url_path=TOKEN)
+    app.run(host="https://weatheregorbot.herokuapp.com/" + TOKEN,
             port=PORT,
             debug=True)
