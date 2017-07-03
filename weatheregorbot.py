@@ -4,7 +4,7 @@ from flask import Flask, request
 from werkzeug.contrib.fixers import ProxyFix
 
 TOKEN = "308017424:AAEcnQMCPCaMP-s-YNVx298DFOPtR69DRFU"
-PORT = int(os.environ.get('PORT', '5000'))
+PORT = int(os.environ.get('PORT', '8000'))
 
 global bot
 bot = telegram.Bot(token = TOKEN)
@@ -30,6 +30,8 @@ def webhook_handler():
 
 @app.route('/set_webhook', methods=['GET', 'POST'])
 def set_webhook():
+    start_webhook(listen="0.0.0.0", port=PORT, url_path=TOKEN)
+
     s = bot.setWebhook("https://weatheregorbot.herokuapp.com/" + TOKEN)
     if s:
         return "webhook setup ok"
