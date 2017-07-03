@@ -1,1 +1,1 @@
-web: python weatheregorbot.py
+web: gunicorn weatheregorbot:app
