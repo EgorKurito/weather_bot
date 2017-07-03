@@ -5,11 +5,11 @@ from werkzeug.contrib.fixers import ProxyFix
 
 TOKEN = "308017424:AAEcnQMCPCaMP-s-YNVx298DFOPtR69DRFU"
 PORT = int(os.environ.get('PORT', '5000'))
+HOST = "https://weatheregorbot.herokuapp.com/"
 
 global bot
 bot = telegram.Bot(token = TOKEN)
 app = Flask(__name__)
-
 
 @app.route('/'+TOKEN, methods=['POST'])
 def webhook_handler():
@@ -27,24 +27,17 @@ def webhook_handler():
 
     return 'ok'
 
-
-@app.route('/set_webhook', methods=['GET', 'POST'])
-def set_webhook():
-    start_webhook(listen="0.0.0.0", port=PORT, url_path=TOKEN)
-
-    s = bot.setWebhook("https://weatheregorbot.herokuapp.com/" + TOKEN)
-    if s:
-        return "webhook setup ok"
-    else:
-        return "webhook setup failed"
-
-
 @app.route('/')
 def index():
     return 'TEST'
 
+def setWebhook():
+    bot.setWebhook(webhook_url='https://%s:%s/%s' % (HOST, PORT, TOKEN))
+
 app.wsgi_app = ProxyFix(app.wsgi_app)
 if __name__ == '__main__':
-    set_webhook()
-    app.run(host = 0.0.0.0,
-            port = PORT)
+    setWebhook()
+
+    app.run(host='0.0.0.0',
+            port=PORT,
+            debug=True)
