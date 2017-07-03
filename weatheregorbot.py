@@ -4,7 +4,7 @@ from flask import Flask, request
 from werkzeug.contrib.fixers import ProxyFix
 
 TOKEN = "308017424:AAEcnQMCPCaMP-s-YNVx298DFOPtR69DRFU"
-PORT = int(os.environ.get('PORT', '8000'))
+PORT = int(os.environ.get('PORT', '5000'))
 
 global bot
 bot = telegram.Bot(token = TOKEN)
@@ -46,6 +46,5 @@ def index():
 app.wsgi_app = ProxyFix(app.wsgi_app)
 if __name__ == '__main__':
     set_webhook()
-    app.run(0.0.0.0,
-            port=PORT,
-            debug=True)
+    app.run(host = 0.0.0.0,
+            port = PORT)
