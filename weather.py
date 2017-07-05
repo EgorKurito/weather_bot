@@ -1,5 +1,5 @@
 # Import libraries and packages
-import config, weatheregorbot
+import config, main
 import telegram, pyowm
 
 from telegram import Update, ForceReply
