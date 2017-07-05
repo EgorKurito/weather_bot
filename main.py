@@ -8,10 +8,7 @@ from pyowm import OWM
 
 # Main variable
 updater = Updater(token = config.BOT_TOKEN)
-updater.start_webhook(listen = "0.0.0.0",
-                      port = config.PORT,
-                      url_path = config.BOT_TOKEN)
-updater.bot.set_webhook("https://weatheregorbot.herokuapp.com/" + config.BOT_TOKEN)
+
 owm = OWM(config.WEATHER_TOKEN, language = 'ru')
 
 # Bot authentication
@@ -31,9 +28,11 @@ def main():
     dp.add_handler(MessageHandler([Filters.text], weather.city))
     dp.add_handler(CommandHandler('delete', weather.delete, pass_args=True))
     dp.add_handler(MessageHandler([Filters.command], weather.unknown))
-    updater.start_polling()
 
+    updater.start_webhook(listen='0.0.0.0', port=config.PORT, url_path=config.BOT_TOKEN)
+    updater.bot.setWebhook(config.URL + '/' + config.BOT_TOKEN)
     updater.idle()
+
 
 if __name__ == '__main__':
     main()
