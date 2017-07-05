@@ -1,10 +1,10 @@
 import os
 
 # Bot token
-BOT_TOKEN = '308017424:AAEcnQMCPCaMP-s-YNVx298DFOPtR69DRFU'
+BOT_TOKEN = 'Token'
 # Weather API token
-WEATHER_TOKEN = 'a66952168b007928153234c13aa8970d'
+WEATHER_TOKEN = 'Token'
 # URL Heroku
-URL = 'https://weatheregorbot.herokuapp.com'
+URL = 'Url'
 # Port
-PORT = int(os.environ.get('PORT', '5000'))
+PORT = 'Port'
