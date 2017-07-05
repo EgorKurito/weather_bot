@@ -6,3 +6,5 @@ BOT_TOKEN = '308017424:AAEcnQMCPCaMP-s-YNVx298DFOPtR69DRFU'
 WEATHER_TOKEN = 'a66952168b007928153234c13aa8970d'
 # URL Heroku
 URL = 'https://weatheregorbot.herokuapp.com'
+# Port
+PORT = int(os.environ.get('PORT', '5000'))
