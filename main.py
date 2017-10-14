@@ -25,9 +25,9 @@ def main():
     dp = updater.dispatcher
 
     dp.add_handler(CommandHandler("start", weather.start))
-    dp.add_handler(MessageHandler([Filters.text], weather.city))
+    dp.add_handler(MessageHandler(Filters.text, weather.city))
     dp.add_handler(CommandHandler('delete', weather.delete, pass_args=True))
-    dp.add_handler(MessageHandler([Filters.command], weather.unknown))
+    dp.add_handler(MessageHandler(Filters.command, weather.unknown))
 
     updater.start_webhook(listen='0.0.0.0', port=config.PORT, url_path=config.BOT_TOKEN)
     updater.bot.setWebhook(config.URL + '/' + config.BOT_TOKEN)
