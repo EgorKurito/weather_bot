@@ -32,7 +32,7 @@ def main():
     updater.start_webhook(listen='0.0.0.0', port=config.PORT, url_path=config.BOT_TOKEN)
     updater.bot.setWebhook(config.URL + '/' + config.BOT_TOKEN)
     updater.idle()
-
+    #updater.start_polling()
 
 if __name__ == '__main__':
     main()
