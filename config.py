@@ -1,10 +1,13 @@
 import os
 
 # Bot token
-BOT_TOKEN = '236649244:AAEhWLRS1dSQQLnk2im6Q9v-dkvxhGD0FN4'
+BOT_TOKEN = 'BOT TOKEN'
 # Weather API token
-WEATHER_TOKEN = 'a66952168b007928153234c13aa8970d'
+WEATHER_TOKEN = 'WEATHER TOKEN'
+
+# If you use webhook --- 
+
 # URL Heroku
-URL = 'https://mysterious-journey-16229.herokuapp.com/'
+URL = 'HEROKU APP URL'
 # Port
-PORT = int(os.environ.get('PORT', '5000'))
+PORT = "int(os.environ.get('PORT', '5000'))"
