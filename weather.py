@@ -7,7 +7,7 @@ from telegram.ext import Updater, CommandHandler, MessageHandler, Filters
 from pyowm import OWM
 
 # Folding the keyboard
-hide_markup = telegram.ReplyKeyboardHide()
+hide_markup = telegram.ReplyKeyboardRemove()
 
 # List of city(mainkeyboard)
 towns = []

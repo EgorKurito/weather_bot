@@ -7,4 +7,4 @@ WEATHER_TOKEN = 'a66952168b007928153234c13aa8970d'
 # URL Heroku
 URL = 'https://mysterious-journey-16229.herokuapp.com/'
 # Port
-PORT = '5000'
+PORT = int(os.environ.get('PORT', '5000'))
